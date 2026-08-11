@@ -160,3 +160,64 @@ catching you out, a fact about the stack the agent keeps getting wrong --- write
 it down here. Growing this file is the work of harness engineering, and the gap
 between this boilerplate and your own version is part of what your prototype
 says about the developer you're becoming.
+
+## What the sensors in `spec/` cannot see
+
+`spec/*.test.ts` catches *declared* fixed widths and similar static-markup
+facts. It cannot catch **intrinsic** overflow: a flex/grid item whose content
+can't wrap (`white-space: nowrap`, a long URL, a wide table) inherits a
+default `min-width: auto`, which resolves to that content's min-content width
+--- so the child silently sets the track's minimum, the track grows past the
+viewport, and the page scrolls sideways at 390px even though no rule in the
+CSS names a fixed width. `overflow: hidden` on the child hides the symptom
+without fixing it, and every static assertion stays green throughout.
+
+So: any grid or flex child that can contain nowrap content, a long URL, or a
+table needs an explicit `min-width: 0`.
+
+Before shipping, measure it rather than eyeballing it. A real narrow viewport
+is needed, because `resize_window` on this setup does not change `innerWidth`
+--- render the page in a 390px iframe instead and read `scrollWidth`:
+
+```js
+const f = document.createElement("iframe");
+f.src = "/";
+f.setAttribute("width", "390");
+f.setAttribute("height", "844");
+document.body.append(f);
+await new Promise((r) => f.addEventListener("load", r, { once: true }));
+const d = f.contentDocument;
+d.documentElement.scrollWidth > f.contentWindow.innerWidth; // must be false
+```
+
+Run it against every page, not just the home page.
+
+## This machine's runtime
+
+`mise.toml` pins Node 24, and this shell's bare `node` is 22.14. Node 22 cannot
+execute a `.ts` file, so `pnpm check:evidence` --- which runs
+`node scripts/check-evidence.ts` --- dies with
+`ERR_UNKNOWN_FILE_EXTENSION` for reasons that have nothing to do with the work,
+and two of the template's own tests in `scripts/check-evidence.test.ts` fail
+with it too.
+
+Run everything through the pinned runtime: `mise exec -- pnpm check`,
+`mise exec -- pnpm check:evidence`. If a check fails, confirm the runtime
+before believing the failure. CI uses `mise.toml`, so CI is unaffected either
+way.
+
+Two failures are expected until ship day and are not bugs: the live-URL test
+in `spec/*.test.ts` (nothing is deployed while the repo is private) and, until
+`PROCESS.md` and `reflections/crit-2.md` are real, `check:evidence`.
+
+One stack fact worth remembering: `tsconfig.json` declares `lib: ["ES2022", …]`
+even though the runtime is Node 24, so ES2023 array methods like `toSorted`
+fail `pnpm typecheck` in `spec/*.ts`. Use `[...xs].sort()`.
+
+## Crit 2: stack decision
+
+Switching from last week's bare Vite+TS to **Astro** (the course's new default
+from this week). Per "The stack is swappable" above, the two things that bite
+in this swap: set `base` explicitly in `astro.config.mjs` to the repo path
+(`/comp4020-crit2-SharmaKunal14/`) so assets don't 404 on the deployed
+GitHub Pages URL, and commit the regenerated `pnpm-lock.yaml`.
