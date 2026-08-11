@@ -1,0 +1,67 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { trips } from "../data/trips.ts";
+---
+
+<Layout
+  title="Trips"
+  description="Upcoming ANU Mountaineering Club trips: climbing, hiking and mountaineering, one list, no duplicates."
+>
+  <section class="hero">
+    <h1>Upcoming trips</h1>
+    <p>
+      Every trip we're running is listed once, here, in date order. Book
+      through the club's sign-up form linked from each committee email
+      &mdash; this page is the place to check what's on and whether it's
+      still open.
+    </p>
+  </section>
+
+  <section aria-labelledby="trip-list-heading">
+    <h2 id="trip-list-heading">All trips</h2>
+    <div class="trip-table-wrap">
+      <table aria-labelledby="trip-list-heading">
+        <thead>
+          <tr>
+            <th scope="col">Trip</th>
+            <th scope="col">Date</th>
+            <th scope="col">Activity</th>
+            <th scope="col">Grade</th>
+            <th scope="col">Availability</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            trips.map((trip) => (
+              <tr>
+                <th scope="row">{trip.name}</th>
+                <td>{trip.date}</td>
+                <td>{trip.activity}</td>
+                <td>{trip.grade}</td>
+                <td>{trip.spots}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="grades-heading">
+    <h2 id="grades-heading">What the grades mean</h2>
+    <dl class="spec-list">
+      <dt>Beginner</dt>
+      <dd>No prior experience needed. All gear and instruction provided.</dd>
+      <dt>Intermediate</dt>
+      <dd>
+        You've been on at least one club trip in that activity, or can show
+        equivalent outside experience.
+      </dd>
+      <dt>Advanced</dt>
+      <dd>
+        Trip leader approval required beforehand &mdash; email us before you
+        book.
+      </dd>
+    </dl>
+  </section>
+</Layout>

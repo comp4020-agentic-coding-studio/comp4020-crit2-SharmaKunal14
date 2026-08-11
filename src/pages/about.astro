@@ -1,0 +1,72 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="About"
+  description="What ANU Mountaineering Club is, who runs it, and how to join."
+>
+  <section class="hero">
+    <h1>About the club</h1>
+    <p>
+      ANU Mountaineering Club (ANUMC) is a student-run club affiliated with
+      the ANU Students' Association. We organise climbing, hiking, canyoning
+      and mountaineering trips for ANU students year-round, and we run gear
+      hire so members don't need to own equipment before they know if a sport
+      is for them.
+    </p>
+  </section>
+
+  <section aria-labelledby="how-heading">
+    <h2 id="how-heading">How the club runs</h2>
+    <p>
+      A student committee, elected each year, organises the trip calendar,
+      runs the gear store and manages membership. Trips are led by members who
+      hold a qualification or enough logged experience for that trip's grade
+      &mdash; new leaders are mentored on easier trips before leading harder
+      ones.
+    </p>
+    <p>
+      Membership is open to any ANU student and covers discounted trip fees
+      and gear hire rates for the year. You don't need to be a member to come
+      on a first trip &mdash; try one, then decide.
+    </p>
+  </section>
+
+  <section aria-labelledby="activities-heading">
+    <h2 id="activities-heading">What we run</h2>
+    <dl class="spec-list">
+      <dt>Rock climbing</dt>
+      <dd>
+        Top-rope and lead climbing day trips at Booroomba Rocks and further
+        afield, from first-time top-roping to multi-pitch leading.
+      </dd>
+      <dt>Bushwalking</dt>
+      <dd>
+        Day and overnight hikes across Namadgi National Park and Kosciuszko
+        National Park, graded by distance and terrain.
+      </dd>
+      <dt>Mountaineering</dt>
+      <dd>
+        Winter skills trips &mdash; snow travel, rope work and navigation
+        &mdash; for members with prior hiking experience.
+      </dd>
+      <dt>Canyoning</dt>
+      <dd>
+        Warm-weather canyon trips in the Blue Mountains, run with members who
+        hold canyoning-specific leadership experience.
+      </dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="join-heading">
+    <h2 id="join-heading">Joining</h2>
+    <p>
+      Sign up for a membership and trip updates through the ANU Students'
+      Association clubs portal, or come to a weekly club meeting during
+      semester &mdash; details on the <a
+        href={`${import.meta.env.BASE_URL}/contact/`}>contact page</a
+      >.
+    </p>
+  </section>
+</Layout>

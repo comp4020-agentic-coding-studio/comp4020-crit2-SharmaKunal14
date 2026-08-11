@@ -1,0 +1,56 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Contact"
+  description="Get in touch with ANU Mountaineering Club — no login required."
+>
+  <section class="hero">
+    <h1>Contact us</h1>
+    <p>
+      General questions, gear questions and trip questions all go to the
+      committee inbox below &mdash; no login or membership required to reach
+      us.
+    </p>
+  </section>
+
+  <section aria-labelledby="reach-heading">
+    <h2 id="reach-heading">Ways to reach us</h2>
+    <dl class="spec-list">
+      <dt>Email</dt>
+      <dd>anumc.committee@anu.edu.au</dd>
+      <dt>Instagram</dt>
+      <dd>@anumountaineering</dd>
+      <dt>Weekly meeting</dt>
+      <dd>
+        Tuesdays, 7pm, during semester &mdash; ANU Sport building, Room 1.12
+        (same room as the gear store).
+      </dd>
+      <dt>In person</dt>
+      <dd>Drop by the gear store during opening hours &mdash; see the <a href={`${import.meta.env.BASE_URL}/gear/`}>gear store page</a>.</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="questions-heading">
+    <h2 id="questions-heading">Common questions</h2>
+    <dl class="spec-list">
+      <dt>Do I need to be a member to come on a trip?</dt>
+      <dd>No &mdash; your first trip is open at the non-member rate. Join afterwards if you want to keep coming.</dd>
+      <dt>I've never climbed or hiked before, can I still come?</dt>
+      <dd>Yes &mdash; look for trips graded "Beginner" on the <a href={`${import.meta.env.BASE_URL}/trips/`}>trips page</a>, or ask us to point you at one.</dd>
+      <dt>How do I join the committee?</dt>
+      <dd>Committee positions are elected at the club's AGM each year &mdash; email us to be notified when nominations open.</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="official-heading">
+    <h2 id="official-heading">The official club site</h2>
+    <p>
+      This page is a student redesign made for a coursework exercise. For the
+      club's actual, current site &mdash; membership sign-up, the live gear
+      store system and the real trip calendar &mdash; go to
+      <a href="https://anumc.org.au/">anumc.org.au</a>.
+    </p>
+  </section>
+</Layout>

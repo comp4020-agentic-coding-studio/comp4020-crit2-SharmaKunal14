@@ -1,0 +1,77 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { trips } from "../data/trips.ts";
+
+const upcoming = trips.slice(0, 3);
+---
+
+<Layout
+  title="Home"
+  description="ANU Mountaineering Club: climbing, hiking and mountaineering trips run by ANU students, for ANU students."
+>
+  <section class="hero">
+    <h1>Get outside with ANU Mountaineering Club</h1>
+    <p>
+      We're a student club running weekend climbing, hiking and mountaineering
+      trips around the ACT and NSW alps &mdash; open to any ANU student,
+      beginner or experienced.
+    </p>
+    <div class="cta-row">
+      <a class="button primary" href={`${import.meta.env.BASE_URL}/trips/`}
+        >See upcoming trips</a
+      >
+      <a class="button secondary" href={`${import.meta.env.BASE_URL}/contact/`}
+        >Ask us a question</a
+      >
+    </div>
+  </section>
+
+  <section aria-labelledby="upcoming-heading">
+    <h2 id="upcoming-heading">Next three trips</h2>
+    <div class="card-grid">
+      {
+        upcoming.map((trip) => (
+          <article class="card">
+            <h3>{trip.name}</h3>
+            <p>{trip.date} &middot; {trip.activity}</p>
+            <div class="tag-row">
+              <span class="tag">{trip.grade}</span>
+              <span class="tag">{trip.spots}</span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+    <p>
+      <a href={`${import.meta.env.BASE_URL}/trips/`}>Full trip list &rarr;</a>
+    </p>
+  </section>
+
+  <section aria-labelledby="why-heading">
+    <h2 id="why-heading">Why climb with us</h2>
+    <div class="card-grid">
+      <article class="card">
+        <h3>Gear you don't have to own</h3>
+        <p>
+          Members hire ropes, harnesses, helmets and packs from our gear store
+          at member rates, so you can try a sport before buying kit for it.
+        </p>
+      </article>
+      <article class="card">
+        <h3>Trained trip leaders</h3>
+        <p>
+          Every trip runs with a leader who holds a relevant qualification or
+          logged experience for that grade of terrain.
+        </p>
+      </article>
+      <article class="card">
+        <h3>No experience required</h3>
+        <p>
+          Most trips list a beginner option. If a grade doesn't say
+          "Beginner", ask before you book &mdash; we'll point you at one that
+          fits.
+        </p>
+      </article>
+    </div>
+  </section>
+</Layout>

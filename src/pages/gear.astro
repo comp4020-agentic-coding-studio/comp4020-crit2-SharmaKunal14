@@ -1,0 +1,98 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Gear store"
+  description="ANU Mountaineering Club gear store: opening hours, hire rates and what's in stock."
+>
+  <section class="hero">
+    <h1>Gear store</h1>
+    <p>
+      Members can hire climbing, hiking and mountaineering gear at rates well
+      below retail hire shops. No booking needed &mdash; just come by during
+      opening hours with your membership card.
+    </p>
+  </section>
+
+  <section aria-labelledby="hours-heading">
+    <h2 id="hours-heading">Opening hours</h2>
+    <dl class="spec-list">
+      <dt>Tuesdays</dt>
+      <dd>5:30pm &ndash; 7pm, ANU Sport building, Room 1.12</dd>
+      <dt>Thursdays</dt>
+      <dd>5:30pm &ndash; 7pm, ANU Sport building, Room 1.12</dd>
+      <dt>Trip weekends</dt>
+      <dd>Gear for a booked trip can be collected the Friday before, by arrangement with the trip leader.</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="rates-heading">
+    <h2 id="rates-heading">Hire rates (per weekend)</h2>
+    <div class="trip-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Member rate</th>
+            <th scope="col">Non-member rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Climbing harness</th>
+            <td>$5</td>
+            <td>$12</td>
+          </tr>
+          <tr>
+            <th scope="row">Helmet</th>
+            <td>$3</td>
+            <td>$8</td>
+          </tr>
+          <tr>
+            <th scope="row">70L hiking pack</th>
+            <td>$8</td>
+            <td>$18</td>
+          </tr>
+          <tr>
+            <th scope="row">4-season tent (2-person)</th>
+            <td>$12</td>
+            <td>$25</td>
+          </tr>
+          <tr>
+            <th scope="row">Ice axe &amp; crampons (pair)</th>
+            <td>$10</td>
+            <td>$22</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Non-members can hire gear once, for a first trip, at the non-member
+      rate &mdash; after that, join up.
+    </p>
+  </section>
+
+  <section aria-labelledby="stock-heading">
+    <h2 id="stock-heading">What's usually in stock</h2>
+    <div class="card-grid">
+      <article class="card">
+        <h3>Climbing</h3>
+        <p>Harnesses, helmets, quickdraws, belay devices, ropes up to 60m.</p>
+      </article>
+      <article class="card">
+        <h3>Hiking</h3>
+        <p>Packs from 35L&ndash;70L, sleeping bags and mats, trekking poles.</p>
+      </article>
+      <article class="card">
+        <h3>Mountaineering</h3>
+        <p>Ice axes, crampons, 4-season tents, avalanche transceivers.</p>
+      </article>
+    </div>
+    <p>
+      Stock is limited and first-come, first-served &mdash; for a trip that
+      needs specific gear, ask the trip leader ahead of time rather than
+      relying on the store having it that week.
+    </p>
+  </section>
+</Layout>
