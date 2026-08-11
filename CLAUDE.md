@@ -214,9 +214,11 @@ Run everything through the pinned runtime: `mise exec -- pnpm check`,
 before believing the failure. CI uses `mise.toml`, so CI is unaffected either
 way.
 
-Two failures are expected until ship day and are not bugs: the live-URL test
-in `spec/*.test.ts` (nothing is deployed while the repo is private) and, until
-`PROCESS.md` and `reflections/crit-2.md` are real, `check:evidence`.
+One failure is expected until `PROCESS.md` and `reflections/crit-2.md` are
+real: `check:evidence`. Don't put a live-URL assertion in `spec/*.test.ts`
+itself — that suite runs inside CI's `check` job, which gates `deploy`, so a
+check for the live site would never be able to pass on the push that first
+ships it. Verify the deployed URL with a one-off `curl`, not a spec test.
 
 One stack fact worth remembering: `tsconfig.json` declares `lib: ["ES2022", …]`
 even though the runtime is Node 24, so ES2023 array methods like `toSorted`

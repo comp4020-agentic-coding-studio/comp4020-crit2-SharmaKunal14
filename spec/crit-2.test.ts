@@ -9,8 +9,6 @@ import { describe, expect, it } from "vitest";
 // judged by a person at the crit, not by a test. See PROCESS.md and
 // reflections/crit-2.md for those.
 const DIST = resolve("dist");
-const DEPLOYED_URL =
-  "https://comp4020-agentic-coding-studio.github.io/comp4020-crit2-SharmaKunal14/";
 const REAL_SITE = "https://anumc.org.au/";
 
 function htmlFiles(dir: string = DIST): string[] {
@@ -84,12 +82,8 @@ describe("real content, restructured (not a single dumping page)", () => {
   });
 });
 
-describe("deployed and live (only meaningful once shipped)", () => {
-  it("the public GitHub Pages URL serves the page", async () => {
-    const res = await fetch(DEPLOYED_URL).catch(() => null);
-    expect(
-      res?.ok,
-      "expected while the repo is private / not yet deployed — see CLAUDE.md",
-    ).toBe(true);
-  });
-});
+// "Deployed and live" isn't checked here: this file runs inside CI's `check`
+// job, which gates `deploy` — the live URL can't exist yet when this suite
+// runs on the push that first ships the site, so an assertion on it here
+// would permanently block that first deploy. The `ship` skill verifies the
+// live URL directly (curl) after `deploy` finishes instead.
