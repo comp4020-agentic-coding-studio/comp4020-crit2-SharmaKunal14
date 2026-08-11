@@ -175,6 +175,14 @@ without fixing it, and every static assertion stays green throughout.
 So: any grid or flex child that can contain nowrap content, a long URL, or a
 table needs an explicit `min-width: 0`.
 
+The same trap has a grid-track variant that isn't about items at all: a bare
+`max-content` track in `grid-template-columns` sizes to the widest single-line
+content across every row, not just the current viewport's rows --- so a
+two-column `dl` with short terms overflows the moment one row's term is long
+(a full FAQ question, say), even with `min-width: 0` on every child. Fix it at
+the track, not the child: `minmax(0, max-content)` lets the track shrink under
+space pressure instead of forcing the page to fit its longest single line.
+
 Before shipping, measure it rather than eyeballing it. A real narrow viewport
 is needed, because `resize_window` on this setup does not change `innerWidth`
 --- render the page in a 390px iframe instead and read `scrollWidth`:
