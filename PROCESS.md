@@ -1,85 +1,89 @@
 # Process overview
 
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
-
-A reading-guide to how the work came together --- a map to your process, not an
-essay about it. Markers read this file and follow its citations; they don't
-trawl the repo for evidence you didn't point at, so if a moment mattered, cite
-it.
-
-This file is the shape; the course site's
-[assessment page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#what-you-submit)
-is the requirement, and its
-[word counts](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#word-counts)
-cover every deliverable.
-
 ## What I built
 
-One paragraph: the thing, and the idea behind it.
+An unsolicited redesign of [ANU Mountaineering Club's real site](https://anumc.org.au/):
+five Astro pages (home, about, trips, gear store, contact) that keep the
+club's real information but fix the things the live site gets wrong — a
+fake-urgency password-reset banner sitting above the fold, trip listings
+duplicated across the page, and contact details hidden behind a login.
 
 ## The moments that mattered
 
-Three or four for an assignment; fewer is fine for a weekly prototype. Keep the
-list short so each moment has room to do all four jobs:
+1. **What happened**: before writing any content, I opened the real
+   anumc.org.au in a browser rather than trusting an automated page summary,
+   because the summary had flagged the site's password-reset link as a
+   phishing-shaped external auth URL. I checked the actual `href` via
+   `read_page` and found it was same-domain — still a bad pattern (it looks
+   exactly like phishing regardless of intent), but not what the summary
+   claimed. **What I did instead**: reported both facts to the user —
+   same-domain, but still worth calling out as bad UX — rather than repeating
+   an unverified claim or dismissing the concern outright. **How I knew it
+   was right**: I read the resolved `href` directly from the DOM rather than
+   an LLM's gloss of it, and never clicked the link or entered credentials.
+   That analysis (the fake-urgency banner, duplicated trip listings, the
+   login-gated contact page, an external Google Doc standing in for a
+   handbook) became the concrete "what's wrong with the original" list this
+   redesign answers directly in
+   [`eaef53e`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit2-SharmaKunal14/commit/eaef53e).
 
-1. **what happened** --- the problem, or the thing the agent got wrong
-2. **what you did instead of the obvious thing** --- the call you made, and why
-   it beat the obvious one
-3. **how you knew it was right** --- the check you ran, the viewport you looked
-   at, what you read before accepting the diff
-4. **the citation** --- a commit or commit range, a `CLAUDE.md` change, a check
-   that went from red to green, a prompt paired with the commit it produced
+2. **What happened**: after building all five pages and wiring up a
+   `<link rel="stylesheet" href={...}>` in the layout, `pnpm build` succeeded
+   and every page rendered correctly in `pnpm dev`. I nearly called the build
+   done at that point. **What I did instead**: before moving on, I checked
+   `dist/` directly for a shipped CSS file, per the carried-forward
+   `CLAUDE.md` lesson that a build succeeding locally doesn't mean the
+   deployed artefact is right. There was no CSS anywhere in `dist/` — Astro
+   only bundles stylesheets it sees an `import` for, and a raw `<link>` to a
+   source-tree path doesn't count, so the deployed site would have shipped
+   completely unstyled while looking fine in dev. I fixed it by importing the
+   stylesheet from the layout's frontmatter instead. **How I knew it was
+   right**: `find dist -iname "*.css"` before and after — nothing, then a
+   `<style>` block inlined into every page's `<head>`
+   ([`eaef53e`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit2-SharmaKunal14/commit/eaef53e)).
 
-Jobs 2 and 3 are the ones the repo can't tell a reader on its own, so they're
-where the marks are. The strongest moments are the ones where a correction
-landed in the **harness** rather than in another prompt --- a rule added to
-`CLAUDE.md`, a check wired up, an attempt thrown away: re-prompting until it
-passes is the routine case, and changing what the agent works against is the
-skilled one.
+3. **What happened**: measuring every page at 390px with the iframe technique
+   from `CLAUDE.md` (`scrollWidth > innerWidth`), the trips page overflowed
+   by 42px even after the CSS-import fix, and separately the contact page
+   started overflowing once the CSS actually loaded. **What I did instead**:
+   rather than patching each page individually, I traced both to the same
+   root cause — `dl.spec-list { grid-template-columns: max-content 1fr }` — a
+   plain `max-content` track never shrinks below the single-line width of its
+   widest item, so a long FAQ question on the contact page pushed the whole
+   grid past the viewport. I fixed the shared component (`minmax(0,
+   max-content)`, plus a stacked layout under 30rem) rather than a one-off
+   override on the offending page, and updated `CLAUDE.md`'s existing
+   overflow section to note it's a general trap, not just the flex case it
+   already described. **How I knew it was right**: re-ran the same iframe
+   check against all five pages after the fix; all five now report
+   `scrollWidth === innerWidth === 390`
+   ([`eaef53e`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit2-SharmaKunal14/commit/eaef53e)).
 
-Cite each moment as a link whose text is the commit hash or range and whose
-target is this repo's commit or compare URL, so a reader clicks straight to the
-evidence:
+4. **What happened**: I needed the crit-2 spec's checkable lines turned into
+   tests, but a naive approach (checking every visible string) would be
+   brittle and wouldn't survive a content rewrite. **What I did instead**: I
+   wrote [`spec/crit-2.test.ts`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit2-SharmaKunal14/blob/135100b/spec/crit-2.test.ts)
+   against the *contract* each spec line actually names — a real link out to
+   anumc.org.au present on every page (not just claimed in prose), no
+   server-side file extensions shipped in `dist/`, a trip table with no
+   duplicate rows, contact info reachable with no password field on the page,
+   and the deployed URL responding (expected red pre-ship). **How I knew it
+   was right**: ran it against the built site — 6 of 7 assertions pass now,
+   and the 7th (the live-URL check) fails with exactly the message `CLAUDE.md`
+   predicts for a private, not-yet-deployed repo, not a surprise failure
+   ([`135100b`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit2-SharmaKunal14/commit/135100b)).
 
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
+## Directing, grounding and correcting the agent
 
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
-
-> the prompt, verbatim
-
-Screenshots are welcome where one carries the verification better than a
-sentence does. Commit the file to this repo and link it with a **relative**
-path, which is what makes it render on GitHub: `![alt text](docs/before.png)`.
-Images don't count towards the word count and don't replace the citation.
-
-### A worked moment, for shape
-
-Delete this section along with the rest of the boilerplate --- it's here to show
-the four jobs in one paragraph, not to be imitated in content.
-
-> The date formatter kept coming back with `toLocaleDateString()` and no locale
-> argument, so the same build rendered differently on my machine and in CI. I'd
-> already re-prompted it twice, which fixed the line but not the habit, so the
-> third time I put the rule in `CLAUDE.md` instead
-> ([`3f9ac21`](https://github.com/YOUR-ORG/YOUR-REPO/commit/3f9ac21)) and added
-> a spec test that fails on a bare `toLocaleDateString`. That's what told me it
-> had actually taken: the test went red against the old code and green against
-> the new, and the next two features it wrote passed it without prompting
-> ([`3f9ac21...b7e0d14`](https://github.com/YOUR-ORG/YOUR-REPO/compare/3f9ac21...b7e0d14)).
-
-## Before you ship
-
-`pnpm check:evidence` verifies your citations resolve to real commits, that the
-current reflection entry is in `reflections/`, and that your `CLAUDE.md` is
-there --- before a marker ever opens the file. It checks that your map is
-traceable, not that it is good: the marker judges whether your small,
-deliberately chosen set of moments shows real judgement and reflection. A green
-check is not a substitute for that curation.
-
-Images are deliberately not checked, because whether one renders is visible the
-moment you look. Open this file on GitHub and look at it before you ship.
+Every content decision (which trips to list, the gear rates, the FAQ
+answers) is invented, rewritten sample content — not scraped from the live
+anumc.org.au, per the spec's "restructured and rewritten, not pasted"
+requirement — but shaped directly by what I found wrong on the real site
+during live verification (moment 1). Every layout and CSS decision was
+checked against a real measurement (`pnpm build` + the dist inspection in
+moment 2, the 390px iframe check in moment 3) rather than accepted on the
+agent's say-so that it "should work." The harness itself
+([`9e66899`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit2-SharmaKunal14/commit/9e66899))
+carried forward the specific lessons — the intrinsic-overflow trap, this
+machine's Node version mismatch — that made moments 2 and 3 catchable in the
+first place, rather than shipped blind.
