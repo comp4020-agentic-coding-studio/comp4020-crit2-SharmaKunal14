@@ -1,5 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { relativeLink } from "../lib/links";
+
+const link = (target: string) => relativeLink(Astro.url.pathname, import.meta.env.BASE_URL, target);
 ---
 
 <Layout
@@ -65,7 +68,7 @@ import Layout from "../layouts/Layout.astro";
       Sign up for a membership and trip updates through the ANU Students'
       Association clubs portal, or come to a weekly club meeting during
       semester &mdash; details on the <a
-        href={`${import.meta.env.BASE_URL}/contact/`}>contact page</a
+        href={link("contact/")}>contact page</a
       >.
     </p>
   </section>

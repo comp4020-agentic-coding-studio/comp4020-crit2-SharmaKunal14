@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { relativeLink } from "../lib/links";
 
 interface Props {
   title: string;
@@ -10,14 +11,15 @@ const { title, description } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about/", label: "About" },
-  { href: "/trips/", label: "Trips" },
-  { href: "/gear/", label: "Gear store" },
-  { href: "/contact/", label: "Contact" },
+  { target: "", href: "/", label: "Home" },
+  { target: "about/", href: "/about/", label: "About" },
+  { target: "trips/", href: "/trips/", label: "Trips" },
+  { target: "gear/", href: "/gear/", label: "Gear store" },
+  { target: "contact/", href: "/contact/", label: "Contact" },
 ];
 
 const currentPath = Astro.url.pathname.replace(base, "") || "/";
+const link = (target: string) => relativeLink(Astro.url.pathname, import.meta.env.BASE_URL, target);
 ---
 
 <html lang="en">
@@ -29,17 +31,17 @@ const currentPath = Astro.url.pathname.replace(base, "") || "/";
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href={`${base}/`}>ANU Mountaineering Club</a>
+      <a class="brand" href={link("")}>ANU Mountaineering Club</a>
       <nav aria-label="Main">
         <ul>
           {
-            navLinks.map((link) => (
+            navLinks.map((navLink) => (
               <li>
                 <a
-                  href={`${base}${link.href}`}
-                  aria-current={currentPath === link.href ? "page" : undefined}
+                  href={link(navLink.target)}
+                  aria-current={currentPath === navLink.href ? "page" : undefined}
                 >
-                  {link.label}
+                  {navLink.label}
                 </a>
               </li>
             ))

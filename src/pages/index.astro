@@ -1,8 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { trips } from "../data/trips.ts";
+import { relativeLink } from "../lib/links";
 
 const upcoming = trips.slice(0, 3);
+const link = (target: string) => relativeLink(Astro.url.pathname, import.meta.env.BASE_URL, target);
 ---
 
 <Layout
@@ -17,10 +19,10 @@ const upcoming = trips.slice(0, 3);
       beginner or experienced.
     </p>
     <div class="cta-row">
-      <a class="button primary" href={`${import.meta.env.BASE_URL}/trips/`}
+      <a class="button primary" href={link("trips/")}
         >See upcoming trips</a
       >
-      <a class="button secondary" href={`${import.meta.env.BASE_URL}/contact/`}
+      <a class="button secondary" href={link("contact/")}
         >Ask us a question</a
       >
     </div>
@@ -43,7 +45,7 @@ const upcoming = trips.slice(0, 3);
       }
     </div>
     <p>
-      <a href={`${import.meta.env.BASE_URL}/trips/`}>Full trip list &rarr;</a>
+      <a href={link("trips/")}>Full trip list &rarr;</a>
     </p>
   </section>
 

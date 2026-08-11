@@ -1,5 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { relativeLink } from "../lib/links";
+
+const link = (target: string) => relativeLink(Astro.url.pathname, import.meta.env.BASE_URL, target);
 ---
 
 <Layout
@@ -28,7 +31,7 @@ import Layout from "../layouts/Layout.astro";
         (same room as the gear store).
       </dd>
       <dt>In person</dt>
-      <dd>Drop by the gear store during opening hours &mdash; see the <a href={`${import.meta.env.BASE_URL}/gear/`}>gear store page</a>.</dd>
+      <dd>Drop by the gear store during opening hours &mdash; see the <a href={link("gear/")}>gear store page</a>.</dd>
     </dl>
   </section>
 
@@ -38,7 +41,7 @@ import Layout from "../layouts/Layout.astro";
       <dt>Do I need to be a member to come on a trip?</dt>
       <dd>No &mdash; your first trip is open at the non-member rate. Join afterwards if you want to keep coming.</dd>
       <dt>I've never climbed or hiked before, can I still come?</dt>
-      <dd>Yes &mdash; look for trips graded "Beginner" on the <a href={`${import.meta.env.BASE_URL}/trips/`}>trips page</a>, or ask us to point you at one.</dd>
+      <dd>Yes &mdash; look for trips graded "Beginner" on the <a href={link("trips/")}>trips page</a>, or ask us to point you at one.</dd>
       <dt>How do I join the committee?</dt>
       <dd>Committee positions are elected at the club's AGM each year &mdash; email us to be notified when nominations open.</dd>
     </dl>
