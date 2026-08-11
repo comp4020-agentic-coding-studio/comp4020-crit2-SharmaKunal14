@@ -186,7 +186,7 @@ dl.spec-list {
   gap: 0.4rem 1rem;
 }
 
-@media (max-width: 30rem) {
+@media (width <= 30rem) {
   dl.spec-list {
     grid-template-columns: 1fr;
   }
